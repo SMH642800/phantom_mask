@@ -1,32 +1,58 @@
-# Response
-> The Current content is an **example template**; please edit it to fit your style and content.
 ## A. Required Information
 ### A.1. Requirement Completion Rate
-- [x] List all pharmacies open at a specific time and on a day of the week if requested.
-  - Implemented at xxx API.
-- [x] List all masks sold by a given pharmacy, sorted by mask name or price.
-  - Implemented at xxx API.
-- [x] List all pharmacies with more or less than x mask products within a price range.
-  - Implemented at xxx API.
-- [x] The top x users by total transaction amount of masks within a date range.
-  - Implemented at xxx API.
-- [x] The total number of masks and dollar value of transactions within a date range.
-  - Implemented at xxx API.
-- [x] Search for pharmacies or masks by name, ranked by relevance to the search term.
-  - Implemented at xxx API.
-- [x] Process a user purchases a mask from a pharmacy, and handle all relevant data changes in an atomic transaction.
-  - Implemented at xxx API.
+
+- [x] List all pharmacies open at a specific time and on a day of the week if requested.  
+  - Implemented at `GET /pharmacies/open`
+  
+- [x] List all masks sold by a given pharmacy, sorted by mask name or price.  
+  - Implemented at `GET /pharmacies/{name}/masks`
+  
+- [x] List all pharmacies with more or less than x mask products within a price range.  
+  - Implemented at `GET /pharmacies/filter_by_mask_count`
+  
+- [x] The top x users by total transaction amount of masks within a date range.  
+  - Implemented at `GET /users/top`
+  
+- [x] The total number of masks and dollar value of transactions within a date range.  
+  - Implemented at `GET /summary`
+  
+- [x] Search for pharmacies or masks by name, ranked by relevance to the search term.  
+  - Implemented at `GET /search?query_name=...&search_type=pharmacy|mask`
+  
+- [x] Process a user purchases a mask from a pharmacy, and handle all relevant data changes in an atomic transaction.  
+  - Implemented at `POST /purchase`
+
+
 ### A.2. API Document
+```bash
 > Please describe how to use the API in the API documentation. You can edit by any format (e.g., Markdown or OpenAPI) or free tools (e.g., [hackMD](https://hackmd.io/), [postman](https://www.postman.com/), [google docs](https://docs.google.com/document/u/0/), or  [swagger](https://swagger.io/specification/)).
 
 Import [this](#api-document) json file to Postman.
+```
+
+I used **FastAPI** to implement the server, and it provides interactive API documentation automatically.
+
+You need to run server first by following scripts:
+```bash
+PYTHONPATH=. python app/main.py
+```
+
+Then you can test and view all endpoints through Swagger UI at:
+
+👉 `http://localhost:8000/docs`
+
+
+This includes route parameters, input/output formats, and sample responses.
 
 ### A.3. Import Data Commands
-Please run these two script commands to migrate the data into the database.
+To load the raw data into the database, run the following scripts:
 
 ```bash
-$ rake import_data:pharmacies[PATH_TO_FILE]
-$ rake import_data:users[PATH_TO_FILE]
+# Step 1: Initialize database schema
+PYTHONPATH=. python app/init_db.py
+
+# Step 2: Run the ETL process (transform & load data)
+PYTHONPATH=. python app/etl.py
 ```
 ## B. Bonus Information
 

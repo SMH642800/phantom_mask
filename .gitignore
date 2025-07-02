@@ -1,0 +1,55 @@
+# Byte-compiled / cache
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pyc
+
+# C extensions
+*.so
+
+# Virtual environment
+.env/
+.venv/
+env/
+venv/
+ENV/
+
+# Poetry files
+poetry.lock
+pyproject.toml
+
+# MacOS system files
+.DS_Store
+
+# IDEs and editors
+.idea/
+.vscode/
+
+# SQLite database file (if you don't want to commit it)
+*.sqlite
+*.db
+
+# Logs
+*.log
+
+# Test and coverage files
+.coverage
+htmlcov/
+pytest_cache/
+test_seed.py
+
+# FastAPI OpenAPI schema cache (if used)
+openapi.json
+
+# Node/Vite frontend (if in same repo)
+node_modules/
+dist/
+
+# Environment files
+.env
+.env.*
+
+# Build artifacts
+build/
+*.egg-info/
