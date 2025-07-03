@@ -1,3 +1,6 @@
 sqlalchemy
 fastapi
-uvicorn
+uvicorn[standard]
+pytest
+pytest-cov
+httpx

@@ -1,0 +1,7 @@
+[run]
+omit =
+    app/etl.py
+    app/init_db.py
+    app/utils/time_parser.py
+    app/__init__.py
+    app/utils/__init__.py

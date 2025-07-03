@@ -37,7 +37,6 @@ pyproject.toml
 .coverage
 htmlcov/
 pytest_cache/
-test_seed.py
 
 # FastAPI OpenAPI schema cache (if used)
 openapi.json
