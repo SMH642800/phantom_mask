@@ -56,7 +56,7 @@ PYTHONPATH=. python app/etl.py
 ```
 
 
-## B. Bonus Information18753
+## B. Bonus Information
 ### B.1. Test Coverage Report
 
 I wrote 20+ unit tests using `pytest` and FastAPI’s `TestClient` to verify core functionalities.
