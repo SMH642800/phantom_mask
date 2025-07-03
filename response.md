@@ -115,6 +115,7 @@ docker run -p 8000:8000 phantom-mask-api
 ```
 
 Then access the API at:
+
 👉 `http://localhost:8000/docs`
 
 
