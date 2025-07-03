@@ -1,0 +1,328 @@
+openapi: 3.1.0
+info:
+  title: Pharmacy Mask API
+  version: "1.0"
+servers:
+- url: /
+paths:
+  /pharmacies/open:
+    get:
+      summary: Get Open Pharmacies
+      operationId: get_open_pharmacies_pharmacies_open_get
+      parameters:
+      - name: weekday
+        in: query
+        description: "Weekday (Mon, Tue, etc.)"
+        required: false
+        schema:
+          title: Weekday
+          type: string
+          description: "Weekday (Mon, Tue, etc.)"
+          default: Mon
+      - name: time_str
+        in: query
+        description: Time (HH:MM)
+        required: false
+        schema:
+          title: Time Str
+          type: string
+          description: Time (HH:MM)
+          default: 08:30
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        "422":
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HTTPValidationError"
+  /pharmacies/{pharmacy_name}/masks:
+    get:
+      summary: Get Pharmacy Masks By Pharmacy Name
+      operationId: get_pharmacy_masks_by_pharmacy_name_pharmacies__pharmacy_name__masks_get
+      parameters:
+      - name: pharmacy_name
+        in: path
+        description: Pharymacy Name
+        required: true
+        schema:
+          title: Pharmacy Name
+          type: string
+          description: Pharymacy Name
+      - name: sort_by
+        in: query
+        required: false
+        schema:
+          title: Sort By
+          type: string
+          default: name
+          enum:
+          - name
+          - price
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        "422":
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HTTPValidationError"
+  /pharmacies/filter_by_mask_count:
+    get:
+      summary: Filter Pharmacies By Mask Count
+      operationId: filter_pharmacies_by_mask_count_pharmacies_filter_by_mask_count_get
+      parameters:
+      - name: min_price
+        in: query
+        required: true
+        schema:
+          title: Min Price
+          minimum: 0
+          type: number
+      - name: max_price
+        in: query
+        required: true
+        schema:
+          title: Max Price
+          minimum: 0
+          type: number
+      - name: count
+        in: query
+        required: true
+        schema:
+          title: Count
+          minimum: 0
+          type: integer
+      - name: comparison
+        in: query
+        required: true
+        schema:
+          title: Comparison
+          type: string
+          enum:
+          - more
+          - fewer
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        "422":
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HTTPValidationError"
+  /users/top:
+    get:
+      summary: Get Top Users
+      operationId: get_top_users_users_top_get
+      parameters:
+      - name: limit
+        in: query
+        required: false
+        schema:
+          title: Limit
+          maximum: 100
+          minimum: 1
+          type: integer
+          default: 5
+      - name: start_date
+        in: query
+        description: "Format: YYYY-MM-DD"
+        required: true
+        schema:
+          title: Start Date
+          type: string
+          description: "Format: YYYY-MM-DD"
+      - name: end_date
+        in: query
+        description: "Format: YYYY-MM-DD"
+        required: true
+        schema:
+          title: End Date
+          type: string
+          description: "Format: YYYY-MM-DD"
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        "422":
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HTTPValidationError"
+  /summary:
+    get:
+      summary: Get Mask Summary
+      operationId: get_mask_summary_summary_get
+      parameters:
+      - name: start_date
+        in: query
+        description: "Format: YYYY-MM-DD"
+        required: true
+        schema:
+          title: Start Date
+          type: string
+          description: "Format: YYYY-MM-DD"
+      - name: end_date
+        in: query
+        description: "Format: YYYY-MM-DD"
+        required: true
+        schema:
+          title: End Date
+          type: string
+          description: "Format: YYYY-MM-DD"
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        "422":
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HTTPValidationError"
+  /search:
+    get:
+      summary: Search Items
+      operationId: search_items_search_get
+      parameters:
+      - name: query_name
+        in: query
+        required: true
+        schema:
+          title: Query Name
+          minLength: 1
+          type: string
+      - name: search_type
+        in: query
+        required: true
+        schema:
+          title: Search Type
+          type: string
+          enum:
+          - pharmacy
+          - mask
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        "422":
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HTTPValidationError"
+  /purchase:
+    post:
+      summary: Purchase Masks
+      operationId: purchase_masks_purchase_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PurchaseRequest"
+        required: true
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        "422":
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HTTPValidationError"
+  /:
+    get:
+      summary: Read Root
+      operationId: read_root__get
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+components:
+  schemas:
+    HTTPValidationError:
+      title: HTTPValidationError
+      type: object
+      properties:
+        detail:
+          title: Detail
+          type: array
+          items:
+            $ref: "#/components/schemas/ValidationError"
+    PurchaseItem:
+      title: PurchaseItem
+      required:
+      - mask_name
+      - pharmacy_name
+      - quantity
+      type: object
+      properties:
+        pharmacy_name:
+          title: Pharmacy Name
+          type: string
+        mask_name:
+          title: Mask Name
+          type: string
+        quantity:
+          title: Quantity
+          type: integer
+    PurchaseRequest:
+      title: PurchaseRequest
+      required:
+      - items
+      - user_name
+      type: object
+      properties:
+        user_name:
+          title: User Name
+          type: string
+        items:
+          title: Items
+          type: array
+          items:
+            $ref: "#/components/schemas/PurchaseItem"
+    ValidationError:
+      title: ValidationError
+      required:
+      - loc
+      - msg
+      - type
+      type: object
+      properties:
+        loc:
+          title: Location
+          type: array
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+        msg:
+          title: Message
+          type: string
+        type:
+          title: Error Type
+          type: string

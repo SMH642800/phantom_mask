@@ -24,11 +24,6 @@
 
 
 ### A.2. API Document
-```bash
-> Please describe how to use the API in the API documentation. You can edit by any format (e.g., Markdown or OpenAPI) or free tools (e.g., [hackMD](https://hackmd.io/), [postman](https://www.postman.com/), [google docs](https://docs.google.com/document/u/0/), or  [swagger](https://swagger.io/specification/)).
-
-Import [this](#api-document) json file to Postman.
-```
 
 I used **FastAPI** to implement the server, and it provides interactive API documentation automatically.
 
@@ -41,8 +36,13 @@ Then you can test and view all endpoints through Swagger UI at:
 
 👉 `http://localhost:8000/docs`
 
-
 This includes route parameters, input/output formats, and sample responses.
+
+> You can also directly use [this](./document/openapi-resolved.yaml) to get the complete OpenAPI specification file.
+> 
+> - Usable with Postman, Swagger Editor, or any tool that supports OpenAPI 3.0.
+> - Simply drag and drop or import `document/openapi-resolved.yaml` to browse all API structure, parameters, response formats, and examples.
+
 
 ### A.3. Import Data Commands
 To load the raw data into the database, run the following scripts:
@@ -54,46 +54,76 @@ PYTHONPATH=. python app/init_db.py
 # Step 2: Run the ETL process (transform & load data)
 PYTHONPATH=. python app/etl.py
 ```
-## B. Bonus Information
 
->  If you completed the bonus requirements, please fill in your task below.
+
+## B. Bonus Information18753
 ### B.1. Test Coverage Report
 
-I wrote down the 20 unit tests for the APIs I built. Please check the test coverage report at [here](#test-coverage-report).
+I wrote 20+ unit tests using `pytest` and FastAPI’s `TestClient` to verify core functionalities.
+
+The tests cover:
+- ✅ Root endpoint
+- ✅ Pharmacies: open time filter, mask listing, and price filters
+- ✅ Users: top users by transaction
+- ✅ Summary: total mask sold and value
+- ✅ Search: relevance-based pharmacy/mask lookup
+- ✅ Purchase: valid + error flows
+- ✅ Input validation and exception handling
+
+Please check the test coverage report at below.
+```bash
+==================================== tests coverage ====================================
+___________________ coverage: platform darwin, python 3.13.3-final-0 ___________________
+
+Name                    Stmts   Miss  Cover   Missing
+-----------------------------------------------------
+app/api/__init__.py         0      0   100%
+app/api/pharmacies.py      52      4    92%   90, 92, 109, 138
+app/api/purchase.py        55      4    93%   54, 62, 105-106
+app/api/search.py          50      3    94%   21, 36, 118
+app/api/summary.py         22      0   100%
+app/api/users.py           21      0   100%
+app/db.py                   6      0   100%
+app/main.py                28      4    86%   44, 51, 58-59
+app/models.py              51      0   100%
+-----------------------------------------------------
+TOTAL                     285     15    95%
+================================== 23 passed in 0.20s ==================================
+```
 
 You can run the test script by using the command below:
 
 ```bash
-bundle exec rspec spec
+PYTHONPATH=. pytest --cov=app --cov-report=term-missing --cov-config=.coveragerc
 ```
+
 
 ### B.2. Dockerized
-Please check my Dockerfile / docker-compose.yml at [here](#dockerized).
+
+I have fully Dockerized the FastAPI application using a `Dockerfile` based on Python 3.12.
+
+Please check my Dockerfile at [here](./Dockerfile).
 
 On the local machine, please follow the commands below to build it.
-
 ```bash
-$ docker build --build-arg ENV=development -p 80:3000 -t my-project:1.0.0 .  
-$ docker-compose up -d
-
-# go inside the container, run the migrate data command.
-$ docker exec -it my-project bash
-$ rake import_data:pharmacies[PATH_TO_FILE] 
-$ rake import_data:user[PATH_TO_FILE]
+docker build -t phantom-mask-api .
 ```
 
-### B.3. Demo Site Url
+Run the app in a container:
+```bash
+docker run -p 8000:8000 phantom-mask-api
+```
 
-The demo site is ready on [my AWS demo site](#demo-site-url); you can try any APIs on this demo site.
+Then access the API at:
+👉 `http://localhost:8000/docs`
+
 
 ## C. Other Information
 
 ### C.1. ERD
 
-My ERD [erd-link](#erd-link).
+My ERD.
 
-### C.2. Technical Document
+![ERD](./img/ERD.png)
 
-For frontend programmer reading, please check this [technical document](technical-document) to know how to operate those APIs.
-
-- --
+---
