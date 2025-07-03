@@ -18,8 +18,8 @@ def get_db():
 # List all pharmacies open at a specific time and on a day of the week
 @router.get("/open")
 def get_open_pharmacies(
-    weekday: str = Query(..., example="Mon"),
-    time_str: str = Query(..., example="08:30"),
+    weekday: str = Query("Mon", description="Weekday (Mon, Tue, etc.)"),
+    time_str: str = Query("08:30", description="Time (HH:MM)"),
     db: Session = Depends(get_db)
 ):
     try:
