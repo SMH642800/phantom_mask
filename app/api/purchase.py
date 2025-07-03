@@ -79,7 +79,7 @@ def purchase_masks(
         user.cash_balance -= total_cost
         for transaction in transactions:
             # Add money to the pharmacy
-            pharmacy = db.query(Pharmacy).get(transaction["pharmacy_id"])
+            pharmacy = db.get(Pharmacy, transaction["pharmacy_id"])
             pharmacy.cash_balance += transaction["transaction_amount"]
 
             # Record the transaction
