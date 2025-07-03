@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Query, Depends
+from fastapi import APIRouter, Query, Depends, HTTPException
 from sqlalchemy.orm import Session
 from sqlalchemy import func, and_
 from datetime import datetime
@@ -28,7 +28,7 @@ def get_top_users(
         start_date = datetime.strptime(start_date, "%Y-%m-%d")
         end_date = datetime.strptime(end_date + " 23:59:59", "%Y-%m-%d %H:%M:%S")
     except ValueError:
-        return {"Error: Invalid date format. Use YYYY-MM-DD"}
+        raise HTTPException(status_code=400, detail="Invalid date format. Use YYYY-MM-DD")
     
     # Get top users by total mask transaction amounts within date range
     result = (

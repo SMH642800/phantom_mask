@@ -25,24 +25,17 @@ def get_open_pharmacies(
     try:
         query_time = datetime.strptime(time_str, "%H:%M").time()
     except ValueError:
-        return {"error": "Invalid time format. Use HH:MM."}
+        raise HTTPException(status_code=400, detail="Invalid time format. Use HH:MM.")
 
-    print("🔍 weekday =", weekday)
-    print("🕒 time =", query_time)
-
-    try:
-        pharmacies = db.query(Pharmacy).join(OpeningHour).filter(
-            OpeningHour.day_of_week == weekday,
-            ((OpeningHour.start_time <= OpeningHour.end_time) &
-             (OpeningHour.start_time <= query_time) &
-             (OpeningHour.end_time > query_time))
-            |
-            ((OpeningHour.start_time > OpeningHour.end_time) &
-             ((query_time >= OpeningHour.start_time) | (query_time < OpeningHour.end_time)))
-        ).all()
-    except Exception as e:
-        print("❌ ERROR:", e)
-        raise
+    pharmacies = db.query(Pharmacy).join(OpeningHour).filter(
+        OpeningHour.day_of_week == weekday,
+        ((OpeningHour.start_time <= OpeningHour.end_time) &
+         (OpeningHour.start_time <= query_time) &
+         (OpeningHour.end_time > query_time))
+        |
+        ((OpeningHour.start_time > OpeningHour.end_time) &
+         ((query_time >= OpeningHour.start_time) | (query_time < OpeningHour.end_time)))
+    ).all()
 
     return [
         {"pharmacy_id": pharmacy.id, "pharmacy_name": pharmacy.name, "cash_balance": pharmacy.cash_balance} for pharmacy in pharmacies
