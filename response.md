@@ -157,7 +157,7 @@ Run the app in a container:
 docker run -p 8000:8000 phantom-mask-api
 ```
 
-Then access the API at:
+Then you can test and view all endpoints through Swagger UI at:
 
 👉 `http://localhost:8000/docs`
 
