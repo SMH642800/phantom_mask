@@ -9,7 +9,9 @@ from app.models import Transaction, PharmacyMask
 router = APIRouter()
 
 def get_db():
-    """Dependency for getting a SQLAlchemy session. Used by FastAPI Depends."""
+    """
+    Dependency for getting a SQLAlchemy session. Used by FastAPI Depends.
+    """
     db = SessionLocal()
     try:
         yield db

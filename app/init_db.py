@@ -1,4 +1,3 @@
-
 from app.models import Base
 from app.db import engine
 

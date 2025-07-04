@@ -53,7 +53,7 @@ async def general_exception_handler(request: Request, exc: Exception):
         content={"error": "Internal server error"}
     )
 
-# For local development: run with `python app/main.py`
+# For local development: run with `PYTHONPATH=. python app/main.py`
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run("app.main:app", host="127.0.0.1", port=8000, reload=True)
