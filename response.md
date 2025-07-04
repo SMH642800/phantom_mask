@@ -34,6 +34,7 @@
 ### A.2. API Document
 
 **API documentation section, including interactive Swagger UI and OpenAPI yaml import instructions**
+
 I used **FastAPI** to implement the server, and it provides interactive API documentation automatically.
 
 You need to run server first by following scripts:
@@ -50,8 +51,6 @@ This includes route parameters, input/output formats, and sample responses.
 You can also directly use [this](./document/openapi-resolved.yaml) to get the complete OpenAPI specification file. 
 - Usable with Postman, Swagger Editor, or any tool that supports OpenAPI 3.0.
 - Simply drag and drop or import `document/openapi-resolved.yaml` to browse all API structure, parameters, response formats, and examples.
-
-**All API input/output formats and examples can be interactively viewed in Swagger UI, or by importing the yaml into Postman/Swagger Editor.**
 
 
 ### A.3. Import Data Commands
