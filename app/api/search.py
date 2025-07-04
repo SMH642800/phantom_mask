@@ -9,6 +9,9 @@ router = APIRouter()
 
 
 def get_db():
+    """
+    Dependency for getting a SQLAlchemy session. Used by FastAPI Depends.
+    """
     db = SessionLocal()
     try:
         yield db
@@ -16,7 +19,9 @@ def get_db():
         db.close()
 
 def calculate_relevance_score(search_term: str, target_text: str) -> float:
-    """Calculate relevance score between search term and target text"""
+    """
+    Calculate the relevance score between the search term and target text (exact match, startswith, contains, fuzzy match).
+    """
     if not search_term or not target_text:
         return 0.0
     
@@ -40,13 +45,22 @@ def calculate_relevance_score(search_term: str, target_text: str) -> float:
 
     return max(0.0, similarity) if similarity > 0.3 else 0.0
 
-# Search for pharmacies or masks by name and rank the results by relevance to the search term
+# ============================================================================================
+# GET /search?query_name=...&search_type=pharmacy|mask
+# Purpose: Search for pharmacies or masks by name and rank the results by relevance to the search term
+# ============================================================================================
 @router.get("")
 def search_items(
     query_name: str = Query(..., min_length=1),
     search_type: str = Query(..., enum=["pharmacy", "mask"]),
     db: Session = Depends(get_db)
 ):
+    """
+    Search for pharmacies or masks by name and rank by relevance.
+    - query_name: Search keyword
+    - search_type: 'pharmacy' or 'mask'
+    Returns: List of relevant results
+    """
     keyword = query_name.lower()
     results = []
 

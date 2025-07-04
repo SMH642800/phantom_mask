@@ -9,6 +9,7 @@ from app.models import Transaction, PharmacyMask
 router = APIRouter()
 
 def get_db():
+    """Dependency for getting a SQLAlchemy session. Used by FastAPI Depends."""
     db = SessionLocal()
     try:
         yield db
@@ -25,6 +26,11 @@ def get_mask_summary(
     end_date: str = Query(..., description="Format: YYYY-MM-DD"),
     db: Session = Depends(get_db)
 ):
+    """
+    Calculate total transactions, total masks sold, and total value within a date range.
+    - start_date, end_date: Date range (YYYY-MM-DD)
+    Returns: Summary result dict
+    """
     # Parse date range
     try:
         start_date = datetime.strptime(start_date, "%Y-%m-%d")

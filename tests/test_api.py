@@ -2,6 +2,9 @@ from app.models import User, Pharmacy, Mask, PharmacyMask
 from app.api import pharmacies, purchase, summary, search, users
 
 def setup_test_data(db):
+    """
+    Create test user, pharmacy, mask, and their relationship for testing.
+    """
     user = User(name="TestUser", cash_balance=100.0)
     pharmacy = Pharmacy(name="TestPharmacy", cash_balance=0.0)
     mask = Mask(name="KF94")
@@ -11,8 +14,10 @@ def setup_test_data(db):
     db.commit()
     return user, pharmacy, mask
 
-# coverage: test all get_db generators in one place
 def _test_get_db_covered(get_db_func):
+    """
+    Cover the finally block of get_db generator to improve coverage.
+    """
     gen = get_db_func()
     db = next(gen)
     assert db is not None
@@ -38,6 +43,9 @@ def test_users_get_db():
 
 
 def test_purchase_success(client):
+    """
+    Test successful purchase flow.
+    """
     db = next(client.app.dependency_overrides[client.app.dependency_overrides.keys().__iter__().__next__()]())
     user, pharmacy, mask = setup_test_data(db)
 
@@ -58,6 +66,9 @@ def test_purchase_success(client):
 
 
 def test_purchase_insufficient_funds(client):
+    """
+    Test purchase flow when user has insufficient funds.
+    """
     db = next(client.app.dependency_overrides[client.app.dependency_overrides.keys().__iter__().__next__()]())
     user = User(name="LowFundsUser", cash_balance=5.0)
     pharmacy = Pharmacy(name="CheapPharmacy", cash_balance=0.0)
@@ -173,7 +184,7 @@ def test_summary_success(client):
 
 
 def test_filter_by_mask_count_invalid(client):
-    response = client.get("/pharmacies/filter_by_mask_count", params={
+    response = client.get("/pharmacies/filter_by_mask_count_within_price_range", params={
         "min_price": 50,
         "max_price": 10,
         "count": 2,
@@ -183,7 +194,7 @@ def test_filter_by_mask_count_invalid(client):
 
 
 def test_filter_by_mask_count_success(client):
-    response = client.get("/pharmacies/filter_by_mask_count", params={
+    response = client.get("/pharmacies/filter_by_mask_count_within_price_range", params={
         "min_price": 0,
         "max_price": 100,
         "count": 0,

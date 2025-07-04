@@ -1,8 +1,14 @@
+# Utility functions for parsing pharmacy opening hours string into structured data.
 import re
 from datetime import time
 
 
 def parse_opening_hours(opening_str):
+    """
+    Parse a string describing opening hours (e.g. 'Mon - Fri 08:00 - 18:00 / Sat, Sun 09:00 - 12:00')
+    into a list of dicts with day, start, end, and is_overnight fields.
+    Returns: List[dict]
+    """
     results = []
     sections = [s.strip() for s in opening_str.split("/")]
 
@@ -28,6 +34,10 @@ def parse_opening_hours(opening_str):
 
 
 def parse_days(day_part):
+    """
+    Parse a day part string (e.g. 'Mon - Fri', 'Mon, Wed, Fri') into a list of weekday strings.
+    Returns: List[str]
+    """
     day_map = {
         "Mon": "Mon", "Tue": "Tue", "Wed": "Wed",
         "Thu": "Thu", "Thur": "Thu",
@@ -50,5 +60,8 @@ def parse_days(day_part):
 
 
 def to_time(t_str):
+    """
+    Convert a string in HH:MM format to a datetime.time object.
+    """
     hour, minute = map(int, t_str.split(":"))
     return time(hour, minute)

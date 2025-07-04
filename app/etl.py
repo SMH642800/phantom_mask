@@ -8,6 +8,10 @@ from app.utils.time_parser import parse_opening_hours
 
 
 def load_pharmacies(session: Session, path: str):
+    """
+    Load pharmacy data from JSON file, including opening hours and masks sold.
+    Avoids duplicate pharmacies and masks.
+    """
     with open(path, "r", encoding="utf-8") as f:
         data = json.load(f)
 
@@ -57,6 +61,10 @@ def load_pharmacies(session: Session, path: str):
 
 
 def load_users(session: Session, path: str):
+    """
+    Load user data from JSON file, including purchase histories.
+    Avoids duplicate users and transactions.
+    """
     with open(path, "r", encoding="utf-8") as f:
         data = json.load(f)
 
@@ -100,6 +108,9 @@ def load_users(session: Session, path: str):
                     session.add(transaction)
 
 def main():
+    """
+    Main ETL entry point: create tables, load pharmacies and users, commit and close session.
+    """
     Base.metadata.create_all(bind=engine)
     session = SessionLocal()
 

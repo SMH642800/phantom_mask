@@ -12,32 +12,47 @@ router = APIRouter()
 
 # Dependency
 def get_db():
+    """
+    Dependency for getting a SQLAlchemy session. Used by FastAPI Depends.
+    """
     db = SessionLocal()
     try:
         yield db
     finally:
         db.close()
 
+
 # ---------------------------
 # Pydantic input model
 # ---------------------------
+# Single purchase item, including pharmacy, mask name, and quantity.
 class PurchaseItem(BaseModel):
     pharmacy_name: str
     mask_name: str
     quantity: int
 
+
+# Purchase request, including user name and multiple purchase items.
 class PurchaseRequest(BaseModel):
     user_name: str
     items: List[PurchaseItem]
 
-# ---------------------------
+
+# ==============================================================================================
 # POST /purchase
-# ---------------------------
+# Purpose: Handle mask purchase request, check balance, record transaction, and deduct funds.
+# ===============================================================================================
 @router.post("")
 def purchase_masks(
     data: PurchaseRequest,
     db: Session = Depends(get_db)
 ):
+    """
+    Handle mask purchase request, check balance, record transaction, and deduct funds.
+    - data: Purchase request data
+    - db: Database session
+    Returns: Purchase result message
+    """
     # Step 1: Validate user
     user = db.query(User).filter_by(name=data.user_name).first()
     if not user:

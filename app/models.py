@@ -1,10 +1,17 @@
 from sqlalchemy import Column, Integer, Float, String, Time, DateTime, Boolean, ForeignKey
 from sqlalchemy.orm import relationship, declarative_base
 
+
+# SQLAlchemy declarative base for all ORM models
 Base = declarative_base()
 
 
+
 class Pharmacy(Base):
+    """
+    Pharmacy table: stores pharmacy info and cash balance.
+    Relationships: opening hours, masks, transactions.
+    """
     __tablename__ = 'pharmacies'
 
     id = Column(Integer, primary_key=True)
@@ -16,7 +23,11 @@ class Pharmacy(Base):
     transactions = relationship('Transaction', back_populates='pharmacy')
 
 
+
 class OpeningHour(Base):
+    """
+    OpeningHour table: stores opening hours for each pharmacy.
+    """
     __tablename__ = 'opening_hours'
 
     id = Column(Integer, primary_key=True)
@@ -29,7 +40,12 @@ class OpeningHour(Base):
     pharmacy = relationship('Pharmacy', back_populates='opening_hours')
 
 
+
 class Mask(Base):
+    """
+    Mask table: stores mask product info.
+    Relationships: pharmacies selling this mask, transactions.
+    """
     __tablename__ = 'masks'
 
     id = Column(Integer, primary_key=True)
@@ -39,7 +55,11 @@ class Mask(Base):
     transactions = relationship('Transaction', back_populates='mask')
 
 
+
 class PharmacyMask(Base):
+    """
+    PharmacyMask table: association table for pharmacy and mask, with price.
+    """
     __tablename__ = 'pharmacy_masks'
 
     id = Column(Integer, primary_key=True)
@@ -51,7 +71,11 @@ class PharmacyMask(Base):
     mask = relationship('Mask', back_populates='pharmacies')
 
 
+
 class User(Base):
+    """
+    User table: stores user info and cash balance.
+    """
     __tablename__ = 'users'
 
     id = Column(Integer, primary_key=True)
@@ -61,7 +85,11 @@ class User(Base):
     transactions = relationship('Transaction', back_populates='user')
 
 
+
 class Transaction(Base):
+    """
+    Transaction table: records each mask purchase transaction.
+    """
     __tablename__ = 'transactions'
 
     id = Column(Integer, primary_key=True)

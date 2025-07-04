@@ -4,13 +4,13 @@ from fastapi.exceptions import RequestValidationError
 from starlette.exceptions import HTTPException as StarletteHTTPException
 from app.api import pharmacies, users, summary, search, purchase
 
-
+# Main FastAPI application entry point
 app = FastAPI(
     title="Pharmacy Mask API",
     version="1.0"
 )
 
-# Register routers
+# Register all API routers with their respective prefixes
 def register_routers():
     app.include_router(pharmacies.router, prefix="/pharmacies")
     app.include_router(users.router, prefix="/users")
@@ -21,7 +21,7 @@ def register_routers():
 # Register the routers when the app starts
 register_routers()
 
-# Add a root endpoint
+# Root endpoint for health check and API info
 @app.get("/")
 def read_root():
     return {
@@ -31,7 +31,7 @@ def read_root():
         "redoc_url": "/redoc"
     }
 
-# Global exception handlers
+# Global exception handlers for consistent error responses
 @app.exception_handler(StarletteHTTPException)
 async def http_exception_handler(request: Request, exc: StarletteHTTPException):
     return JSONResponse(
@@ -53,7 +53,7 @@ async def general_exception_handler(request: Request, exc: Exception):
         content={"error": "Internal server error"}
     )
 
-
+# For local development: run with `python app/main.py`
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run("app.main:app", host="127.0.0.1", port=8000, reload=True)

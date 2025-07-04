@@ -1,3 +1,7 @@
+"""
+Pharmacies API
+Provides pharmacy query, mask query, and filter functions.
+"""
 from fastapi import APIRouter, Query, Depends, Path, HTTPException
 from datetime import datetime
 from sqlalchemy.orm import Session
@@ -9,19 +13,33 @@ from app.models import Pharmacy, OpeningHour, PharmacyMask, Mask
 router = APIRouter()
 
 def get_db():
+    """
+    Dependency for getting a SQLAlchemy session. Used by FastAPI Depends.
+    """
     db = SessionLocal()
     try:
         yield db
     finally:
         db.close()
 
-# List all pharmacies open at a specific time and on a day of the week
+
+# ============================================================================================
+# GET /pharmacies/open
+# Purpose: List all pharmacies open at a specific time and on a day of the week.
+# ============================================================================================  
 @router.get("/open")
 def get_open_pharmacies(
-    weekday: str = Query("Mon", description="Weekday (Mon, Tue, etc.)"),
-    time_str: str = Query("08:30", description="Time (HH:MM)"),
+    weekday: str = Query("Mon", description="Weekday (Mon, Tue, ..., etc.)"),
+    time_str: str = Query("08:30", description="Time (HH:MM, 24-hour format, e.g., 08:30)"),
     db: Session = Depends(get_db)
 ):
+    """
+    Query pharmacies open at a specific weekday and time.
+    - weekday: Day of week (Mon, Tue, ..., etc.)
+    - time_str: Time (HH:MM, 24-hour format, e.g., 08:30)
+    - db: Database session (auto-injected)
+    Returns: List of pharmacies matching the criteria
+    """
     try:
         query_time = datetime.strptime(time_str, "%H:%M").time()
     except ValueError:
@@ -41,13 +59,22 @@ def get_open_pharmacies(
         {"pharmacy_id": pharmacy.id, "pharmacy_name": pharmacy.name, "cash_balance": pharmacy.cash_balance} for pharmacy in pharmacies
     ]
 
-# List all masks sold by a given pharmacy, sorted by mask name or price
+# ============================================================================================
+# GET /pharmacies/{pharmacy_name}/masks
+# Purpose: Query masks sold by a specific pharmacy, sorted by name or price.
+# ============================================================================================
 @router.get("/{pharmacy_name}/masks")
 def get_pharmacy_masks_by_pharmacy_name(
     pharmacy_name: str = Path(..., description="Pharymacy Name"),
     sort_by: str = Query("name", enum=["name", "price"]),
     db: Session = Depends(get_db)
 ):
+    """
+    Query masks sold by a specific pharmacy, sorted by name or price.
+    - pharmacy_name: Pharmacy name
+    - sort_by: Sort by ('name' or 'price')
+    Returns: List of masks
+    """
     # Look up the pharmacy by name
     pharmacy = db.query(Pharmacy).filter_by(name=pharmacy_name).first()
     if not pharmacy:
@@ -74,8 +101,11 @@ def get_pharmacy_masks_by_pharmacy_name(
         for pharmacyMask in results
     ]
 
-# List all pharmacies with more or fewer than x mask products within a specific price range
-@router.get("/filter_by_mask_count")
+# ============================================================================================
+# GET /pharmacies/filter_by_mask_count
+# Purpose: List all pharmacies with more or less than x mask products within a price range.
+# ============================================================================================
+@router.get("/filter_by_mask_count_within_price_range")
 def filter_pharmacies_by_mask_count(
     min_price: float = Query(..., ge=0),
     max_price: float = Query(..., ge=0),
@@ -83,6 +113,13 @@ def filter_pharmacies_by_mask_count(
     comparison: str = Query(..., enum=["more", "fewer"]),
     db: Session = Depends(get_db)
 ):
+    """
+    Filter pharmacies by mask price range and count condition.
+    - min_price, max_price: Price range
+    - count: Mask count threshold
+    - comparison: 'more' or 'fewer'
+    Returns: Pharmacies and their masks matching the condition
+    """
     # Handle unexcepted error
     if min_price > max_price:
         raise HTTPException(status_code=400, detail="min_price must be less than or equal to max_price")
