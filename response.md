@@ -43,7 +43,7 @@ You can run the project in two ways: locally (with Python) or using Docker.
    ```bash
    PYTHONPATH=. python app/init_db.py
    ```
-3. (Optional) Load sample data:
+3. Load sample data:
    ```bash
    PYTHONPATH=. python app/etl.py
    ```
