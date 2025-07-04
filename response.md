@@ -30,8 +30,54 @@
   - Implemented at `POST /purchase`
 
 
+### A.2. How to Run the Project
 
-### A.2. API Document
+You can run the project in two ways: locally (with Python) or using Docker.
+
+#### Option 1: Run Locally (Python)
+1. Install dependencies:
+   ```bash
+   pip install -r requirements.txt
+   ```
+2. Initialize the database schema:
+   ```bash
+   PYTHONPATH=. python app/init_db.py
+   ```
+3. (Optional) Load sample data:
+   ```bash
+   PYTHONPATH=. python app/etl.py
+   ```
+4. Start the FastAPI server:
+   ```bash
+   PYTHONPATH=. python app/main.py
+   ```
+5. Open your browser and visit: [http://localhost:8000/docs](http://localhost:8000/docs)
+
+#### Option 2: Run with Docker
+1. Build the Docker image:
+   ```bash
+   docker build -t phantom-mask-api .
+   ```
+2. Run the container:
+   ```bash
+   docker run -p 8000:8000 phantom-mask-api
+   ```
+3. Open your browser and visit: [http://localhost:8000/docs](http://localhost:8000/docs)
+
+
+### A.3. Import Data Commands
+To load the raw data into the database, run the following scripts:
+
+```bash
+# Step 1: Initialize database schema
+PYTHONPATH=. python app/init_db.py
+
+# Step 2: Run the ETL process (transform & load data)
+PYTHONPATH=. python app/etl.py
+```
+
+
+### A.4. API Document
 
 **API documentation section, including interactive Swagger UI and OpenAPI yaml import instructions**
 
@@ -51,18 +97,6 @@ This includes route parameters, input/output formats, and sample responses.
 You can also directly use [this](./document/openapi-resolved.yaml) to get the complete OpenAPI specification file. 
 - Usable with Postman, Swagger Editor, or any tool that supports OpenAPI 3.0.
 - Simply drag and drop or import `document/openapi-resolved.yaml` to browse all API structure, parameters, response formats, and examples.
-
-
-### A.3. Import Data Commands
-To load the raw data into the database, run the following scripts:
-
-```bash
-# Step 1: Initialize database schema
-PYTHONPATH=. python app/init_db.py
-
-# Step 2: Run the ETL process (transform & load data)
-PYTHONPATH=. python app/etl.py
-```
 
 
 ## B. Bonus Information
