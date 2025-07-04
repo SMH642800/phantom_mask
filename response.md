@@ -1,33 +1,39 @@
 ## A. Required Information
 ### A.1. Requirement Completion Rate
 
-- <!-- Feature requirements and corresponding API paths for easy review and tracking -->
-- [x] List all pharmacies open at a specific time and on a day of the week if requested.  
-  - Implemented at `GET /pharmacies/open`  <!-- Query pharmacies open at a specific time -->
+- [x] List all pharmacies open at a specific time and on a day of the week if requested.
+  - Query pharmacies open at a specific time
+  - Implemented at `GET /pharmacies/open`
   
 - [x] List all masks sold by a given pharmacy, sorted by mask name or price.  
-  - Implemented at `GET /pharmacies/{name}/masks`  <!-- Query masks sold by a given pharmacy -->
+  - Query masks sold by a given pharmacy
+  - Implemented at `GET /pharmacies/{name}/masks`
   
 - [x] List all pharmacies with more or less than x mask products within a price range.  
-  - Implemented at `GET /pharmacies/filter_by_mask_count`  <!-- Filter pharmacies by specific mask count condition within a price range -->
+  - Filter pharmacies by a specific mask count condition within a price range
+  - Implemented at `GET /pharmacies/filter_by_mask_count`
   
-- [x] The top x users by total transaction amount of masks within a date range.  
-  - Implemented at `GET /users/top`  <!-- Query top users by transaction amount in a date range -->
+- [x] The top x users by total transaction amount of masks within a date range.
+  - Query top users by transaction amount in a date range
+  - Implemented at `GET /users/top`
   
 - [x] The total number of masks and dollar value of transactions within a date range.  
-  - Implemented at `GET /summary`  <!-- Query total transactions and value in a date range -->
+  - Query total transactions and value in a date range
+  - Implemented at `GET /summary`
   
 - [x] Search for pharmacies or masks by name, ranked by relevance to the search term.  
-  - Implemented at `GET /search?query_name=...&search_type=pharmacy|mask`  <!-- Keyword search for pharmacies or masks -->
+  - Keyword search for pharmacies or masks
+  - Implemented at `GET /search?query_name=...&search_type=pharmacy|mask`
   
 - [x] Process a user purchases a mask from a pharmacy, and handle all relevant data changes in an atomic transaction.  
-  - Implemented at `POST /purchase`  <!-- Handle purchase process and data consistency -->
+  - Handle purchase process and data consistency
+  - Implemented at `POST /purchase`
 
 
 
 ### A.2. API Document
 
-<!-- API documentation section, including interactive Swagger UI and OpenAPI yaml import instructions -->
+**API documentation section, including interactive Swagger UI and OpenAPI yaml import instructions**
 I used **FastAPI** to implement the server, and it provides interactive API documentation automatically.
 
 You need to run server first by following scripts:
@@ -41,11 +47,11 @@ Then you can test and view all endpoints through Swagger UI at:
 
 This includes route parameters, input/output formats, and sample responses.
 
-> You can also directly use [this](./document/openapi-resolved.yaml) to get the complete OpenAPI specification file.
-> 
-> - Usable with Postman, Swagger Editor, or any tool that supports OpenAPI 3.0.
-> - Simply drag and drop or import `document/openapi-resolved.yaml` to browse all API structure, parameters, response formats, and examples.
-> <!-- All API input/output formats and examples can be interactively viewed in Swagger UI, or by importing the yaml into Postman/Swagger Editor. -->
+You can also directly use [this](./document/openapi-resolved.yaml) to get the complete OpenAPI specification file. 
+- Usable with Postman, Swagger Editor, or any tool that supports OpenAPI 3.0.
+- Simply drag and drop or import `document/openapi-resolved.yaml` to browse all API structure, parameters, response formats, and examples.
+
+**All API input/output formats and examples can be interactively viewed in Swagger UI, or by importing the yaml into Postman/Swagger Editor.**
 
 
 ### A.3. Import Data Commands
